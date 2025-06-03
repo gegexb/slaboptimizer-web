@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import React, { useState } from 'react';
 import { Slab, Piece, PlacedPiece, CutType } from './types';
 
@@ -244,4 +244,4 @@ function App() {
 }
 
 export default App
->>>>>>> 00b6d8d (Initial commit)
+
