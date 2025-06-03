@@ -207,4 +207,3 @@ export const App: React.FC = () => {
   );
 }
 
-export { App };
