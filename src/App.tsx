@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Slab, Piece, PlacedPiece, CutType } from './types';
+import type { Slab, Piece, PlacedPiece, CutType } from './types';
 
 
 const App: React.FC = () => {
@@ -172,7 +172,7 @@ const App: React.FC = () => {
         <ul>
           {pieces.map((piece) => (
             <li key={piece.id}>
-              {piece.quantity} × {piece.length} x {piece.width} cm ({piece.cutType})
+              {piece.quantity} x {piece.length} x {piece.width} cm ({piece.cutType})
             </li>
           ))}
         </ul>
@@ -197,7 +197,7 @@ const App: React.FC = () => {
                   overflow: "hidden"
                 }}
               >
-                {p.piece.length}×{p.piece.width}
+                {p.piece.length}x{p.piece.width}
               </div>
             ))}
           </div>
@@ -245,3 +245,21 @@ function App() {
 
 export default App
 
+
+import React, { useState } from 'react';
+import type { Slab, Piece, PlacedPiece, CutType } from './types';
+
+const App: React.FC = () => {
+  const [slabs, setSlabs] = useState<Slab[]>([]);
+  const [pieces, setPieces] = useState<Piece[]>([]);
+  const [placedPieces, setPlacedPieces] = useState<PlacedPiece[]>([]);
+
+  return (
+    <div>
+      <h1>Slab Optimizer</h1>
+      {/* UI and functionality will go here */}
+    </div>
+  );
+};
+
+export default App;
