@@ -1,6 +1,10 @@
 
-import React, { useState } from 'react';
+
+
+
+
 import type { Slab, Piece, PlacedPiece, CutType } from './types';
+import React, { useState } from 'react';
 
 
 export const App: React.FC = () => {
@@ -8,12 +12,10 @@ export const App: React.FC = () => {
   const [pieces, setPieces] = useState<Piece[]>([]);
   const [placedPieces, setPlacedPieces] = useState<PlacedPiece[]>([]);
 
-  // Slab form state
   const [slabLength, setSlabLength] = useState('');
   const [slabWidth, setSlabWidth] = useState('');
   const [slabPrice, setSlabPrice] = useState('');
 
-  // Piece form state
   const [pieceLength, setPieceLength] = useState('');
   const [pieceWidth, setPieceWidth] = useState('');
   const [pieceQty, setPieceQty] = useState('');
@@ -21,96 +23,66 @@ export const App: React.FC = () => {
 
   return (
     <div style={{ padding: '2rem', maxWidth: '800px', margin: 'auto' }}>
-      <h1>🛠 Slab Optimizer Pro (Web)</h1>
+      <h1>🛠 Slab Optimizer</h1>
 
-      <section>
-        <h2>🪨 Add Slab</h2>
-        <input
-          placeholder="Length (cm)"
-          value={slabLength}
-          onChange={(e) => setSlabLength(e.target.value)}
-        />
-        <input
-          placeholder="Width (cm)"
-          value={slabWidth}
-          onChange={(e) => setSlabWidth(e.target.value)}
-        />
-        <input
-          placeholder="Price per m² (AED)"
-          value={slabPrice}
-          onChange={(e) => setSlabPrice(e.target.value)}
-        />
+      <section style={{ marginBottom: '2rem' }}>
+        <h2>Add Slab</h2>
+        <input value={slabLength} onChange={(e) => setSlabLength(e.target.value)} placeholder="Length (cm)" />
+        <input value={slabWidth} onChange={(e) => setSlabWidth(e.target.value)} placeholder="Width (cm)" />
+        <input value={slabPrice} onChange={(e) => setSlabPrice(e.target.value)} placeholder="Price per m²" />
         <button
           onClick={() => {
-            const length = parseFloat(slabLength);
-            const width = parseFloat(slabWidth);
-            const price = parseFloat(slabPrice);
-            if (!isNaN(length) && !isNaN(width) && !isNaN(price)) {
-              const newSlab: Slab = {
-                id: crypto.randomUUID(),
-                length,
-                width,
-                pricePerM2: price,
-              };
-              setSlabs([...slabs, newSlab]);
-              console.log("Slabs:", [...slabs, newSlab]);
-              setSlabLength('');
-              setSlabWidth('');
-              setSlabPrice('');
-            }
+            const newSlab: Slab = {
+              id: crypto.randomUUID(),
+              length: parseFloat(slabLength),
+              width: parseFloat(slabWidth),
+              pricePerM2: parseFloat(slabPrice),
+            };
+            setSlabs([...slabs, newSlab]);
+            setSlabLength('');
+            setSlabWidth('');
+            setSlabPrice('');
           }}
         >
           ➕ Add Slab
         </button>
       </section>
 
-      <section style={{ marginTop: '2rem' }}>
-        <h2>🧩 Add Piece</h2>
-        <input
-          placeholder="Length (cm)"
-          value={pieceLength}
-          onChange={(e) => setPieceLength(e.target.value)}
-        />
-        <input
-          placeholder="Width (cm)"
-          value={pieceWidth}
-          onChange={(e) => setPieceWidth(e.target.value)}
-        />
-        <input
-          placeholder="Quantity"
-          value={pieceQty}
-          onChange={(e) => setPieceQty(e.target.value)}
-        />
+      <section style={{ marginBottom: '2rem' }}>
+        <h2>Add Piece</h2>
+        <input value={pieceLength} onChange={(e) => setPieceLength(e.target.value)} placeholder="Length (cm)" />
+        <input value={pieceWidth} onChange={(e) => setPieceWidth(e.target.value)} placeholder="Width (cm)" />
+        <input value={pieceQty} onChange={(e) => setPieceQty(e.target.value)} placeholder="Quantity" />
         <select value={cutType} onChange={(e) => setCutType(e.target.value as CutType)}>
-          <option value="Vertical Cut Only">Vertical</option>
-          <option value="Horizontal Cut Only">Horizontal</option>
-          <option value="Freeform">Freeform</option>
+          <option>Freeform</option>
+          <option>Vertical Cut Only</option>
+          <option>Horizontal Cut Only</option>
         </select>
         <button
           onClick={() => {
-            const length = parseFloat(pieceLength);
-            const width = parseFloat(pieceWidth);
-            const qty = parseInt(pieceQty);
-            if (!isNaN(length) && !isNaN(width) && !isNaN(qty)) {
-              const newPiece: Piece = {
-                id: crypto.randomUUID(),
-                length,
-                width,
-                quantity: qty,
-                cutType,
-              };
-              setPieces([...pieces, newPiece]);
-              console.log("Pieces:", [...pieces, newPiece]);
-              setPieceLength('');
-              setPieceWidth('');
-              setPieceQty('');
-              setCutType('Freeform');
-            }
+            const quantity = parseInt(pieceQty);
+            if (isNaN(quantity) || quantity < 1) return;
+            const basePiece: Piece = {
+              id: crypto.randomUUID(),
+              length: parseFloat(pieceLength),
+              width: parseFloat(pieceWidth),
+              quantity,
+              cutType,
+            };
+            const newPieces = Array.from({ length: quantity }).map(() => ({
+              ...basePiece,
+              id: crypto.randomUUID(),
+            }));
+            setPieces([...pieces, ...newPieces]);
+            setPieceLength('');
+            setPieceWidth('');
+            setPieceQty('');
           }}
         >
-          ➕ Add Piece
+          ➕ Add Piece(s)
         </button>
       </section>
+
 
       <section style={{ marginTop: '2rem' }}>
         <h2>📋 Summary</h2>
@@ -203,6 +175,9 @@ export const App: React.FC = () => {
           </div>
         </div>
       )}
+      <button onClick={() => alert('🚀 Optimization logic will go here')}>
+        🚀 Optimize Layout
+      </button>
     </div>
   );
 }
